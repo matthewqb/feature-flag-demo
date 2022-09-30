@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Layout, Menu, MenuProps } from 'antd';
+import { Layout, Menu, MenuProps, Spin } from 'antd';
 import { getAll, getBoolean } from '@firebase/remote-config';
 
 import { remoteConfig } from 'src/utils/firebase';
@@ -18,7 +18,7 @@ const commonStyle = {
 }
 
 function App() {
-
+  const [initialized, setInitialized] = useState(false)
   const [config, setConfig] = useState<Record<string, Value>>({})
 
   useEffect(() => {
@@ -28,6 +28,7 @@ function App() {
       const fetched = getAll(remoteConfig)
       console.log(fetched)
       setConfig(fetched)
+      setInitialized(true)
     })()
   }, [])
 
@@ -36,6 +37,14 @@ function App() {
     label: `nav ${key}`,
   })), []);
   
+  if (!initialized) {
+    return (
+      <div style={{ margin: 16, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Spin />
+      </div>
+    )
+  }
+
   return (
     <Layout>
       <Header className="header">
