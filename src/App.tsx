@@ -26,7 +26,6 @@ function App() {
     (async () => {
       await fetchAndActivate(remoteConfig)
       const fetched = getAll(remoteConfig)
-      console.log(fetched)
       setConfig(fetched)
       setInitialized(true)
     })()
